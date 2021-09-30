@@ -1,0 +1,46 @@
+datasource db {
+    provider = "mysql"
+    url      = env("DB_URL")
+}
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+model User {
+  id    Int    @id @default(autoincrement())
+  pseudo    String @db.VarChar(255)
+  email     String @db.VarChar(255) @unique
+  password String @db.VarChar(255)
+  imgURL  String @db.VarChar(500)
+  createdAt DateTime @default(now()) @db.Timestamp(6)
+  role Role @default(USER)
+  posts Post[]
+  comments Comment[]
+}
+
+model Post {
+  id       Int  @id @default(autoincrement())
+  title String @db.VarChar(255)
+  message String? @db.VarChar(500)
+  imgURL String? @db.VarChar(500)
+  comments Comment[]
+  createdAt DateTime @default(now()) @db.Timestamp(6)
+  author   User @relation(fields: [authorId], references: [id])
+  authorId Int
+}
+
+model Comment {
+    id     Int  @default(autoincrement()) @id
+    message String
+    createdAt DateTime @default(now()) @db.Timestamp(6)
+    author   User @relation(fields: [authorId], references: [id])
+    authorId Int
+    post   Post @relation(fields: [postId], references: [id])
+    postId Int
+}
+
+enum Role {
+    USER
+    ADMIN
+}
