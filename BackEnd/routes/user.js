@@ -5,9 +5,16 @@ const userCtrl = require('../controllers/user');
 
 const auth = require('../middleware/auth');
 const multer = require('../middleware/multer-config');
+const sauceCtrl = require("../controllers/sauce");
 
-router.post('/signup', userCtrl.signup)
+router.post('/signup', userCtrl.signup);
 
-router.post('/login', userCtrl.login)
+router.post('/login', userCtrl.login);
+
+router.put('/:id',  multer, userCtrl.update);
+
+router.delete('/:id', userCtrl.delete);
+
+router.get('/:id', userCtrl.getOneUser);
 
 module.exports = router;

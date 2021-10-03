@@ -1,5 +1,3 @@
-const Sauce = require('../schema/sauce');
-const fs = require('fs');
 
 /* Création d'une sauce */
 exports.createSauce = (req, res, next) => {

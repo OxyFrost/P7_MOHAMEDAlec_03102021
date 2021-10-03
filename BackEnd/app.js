@@ -1,13 +1,15 @@
 const express = require('express');
 const helmet = require("helmet");
+const {PrismaClient} = require('@prisma/client')
 const path = require('path');
 require('dotenv').config()
 
 
 const userRoutes = require('./routes/user')
-const sauceRoutes = require('./routes/sauce')
+
 
 const app = express();
+
 
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -16,12 +18,14 @@ app.use((req, res, next) => {
     next();
 })
 
+const prisma = new PrismaClient()
+
 app.use(helmet());
 
 app.use(express.json());
+app.use(express.urlencoded({extended : true}));
 
 app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use('/api/user', userRoutes);
-app.use('/api/sauces', sauceRoutes);
 
 module.exports = app;

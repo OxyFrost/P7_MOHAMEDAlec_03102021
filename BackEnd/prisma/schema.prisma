@@ -12,8 +12,10 @@ model User {
   pseudo    String @db.VarChar(255)
   email     String @db.VarChar(255) @unique
   password String @db.VarChar(255)
-  imgURL  String @db.VarChar(500)
+  imgURL  String? @db.VarChar(500) @default("http://localhost:3000/images/default.jpg")
   createdAt DateTime @default(now()) @db.Timestamp(6)
+  updatedAt DateTime @default(now()) @db.Timestamp(6)
+  deletedAt DateTime? @db.Timestamp(6)
   role Role @default(USER)
   posts Post[]
   comments Comment[]
@@ -26,6 +28,7 @@ model Post {
   imgURL String? @db.VarChar(500)
   comments Comment[]
   createdAt DateTime @default(now()) @db.Timestamp(6)
+  deletedAt DateTime? @db.Timestamp(6)
   author   User @relation(fields: [authorId], references: [id])
   authorId Int
 }
