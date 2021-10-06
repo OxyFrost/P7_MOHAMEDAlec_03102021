@@ -28,7 +28,6 @@ model Post {
   imgURL String? @db.VarChar(500)
   comments Comment[]
   createdAt DateTime @default(now()) @db.Timestamp(6)
-  deletedAt DateTime? @db.Timestamp(6)
   author   User @relation(fields: [authorId], references: [id])
   authorId Int
 }

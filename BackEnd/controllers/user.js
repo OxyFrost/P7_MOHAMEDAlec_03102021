@@ -38,6 +38,7 @@ exports.login = async (req, res, next) => {
                     }
                     res.status(200).json({
                         userId: loginUser.id,
+                        role: loginUser.role,
                         token: jwt.sign(
                             {userId: loginUser.id},
                             'RANDOM_TOKEN_SECRET',
@@ -45,10 +46,9 @@ exports.login = async (req, res, next) => {
                         )
                     });
                 })
-                .catch(error => res.status(500).json({error}));
+                .catch(error => res.status(500).json({message: error.message}));
         })
-        .catch(error => res.status(500).json({error}));
-    console.log(loginUser);
+        .catch(error => res.status(500).json({message: error.message}));
 };
 
 //Update des informations d'un Users
@@ -61,7 +61,7 @@ exports.update = async (req, res, next) => {
             },
             data: {
                 pseudo: req.body.pseudo,
-                imgURL: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+                imgURL: `${req.protocol}://${req.get('host')}/images/profile/${req.file.filename}`
             }
         }).then(() => res.status(200).json({message: 'User modifié avec Avatar !'}))
             .catch(error => res.status(400).json({message: error.message}));
