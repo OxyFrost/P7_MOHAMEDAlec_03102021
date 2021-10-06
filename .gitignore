@@ -77,3 +77,6 @@ typings/
 
 .idea
 .env
+*.png
+.idea/vcs.xml
+.idea/vcs.xml
