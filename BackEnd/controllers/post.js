@@ -75,13 +75,9 @@ exports.deletePost = async (req, res, next) => {
 /* Obtention de tout les posts */
 exports.getAllPosts = async (req, res, next) => {
     const posts = await prisma.post.findMany({
-        where:{
-            author:{
-                deletedAt: false,
-            }
-        },
         include:{
-          author:true,
+            author:true,
+            comments:true,
         },
         orderBy: [
             {

@@ -6,18 +6,16 @@ const prisma = new PrismaClient()
 
 //Inscription d'un Users
 exports.signup = async (req, res, next) => {
+    console.log(req.body);
     const user = await prisma.user.create({
         data: {
             pseudo: req.body.pseudo,
             email: req.body.email,
-            password: await bcrypt.hash(req.body.password, 8).catch(err => {
-                res.status(500).send({message: err.message})
-            }),
-
+            password: await bcrypt.hash(req.body.password, 8)
         },
     }).then(() => res.status(201).json({message: 'Utilisateur enregistré !'}))
-        .catch(error => res.status(500).json({message: error.message}));
-    console.log(req.body);
+      .catch(error => res.status(500).json({message: error.message}));
+
 }
 
 //Connexion d'un Users
