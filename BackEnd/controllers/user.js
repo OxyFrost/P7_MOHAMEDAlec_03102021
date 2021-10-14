@@ -38,7 +38,10 @@ exports.login = async (req, res, next) => {
                         userId: loginUser.id,
                         role: loginUser.role,
                         token: jwt.sign(
-                            {userId: loginUser.id},
+                            {
+                                userId: loginUser.id,
+                                role: loginUser.role
+                            },
                             'RANDOM_TOKEN_SECRET',
                             {expiresIn: '24h'}
                         )

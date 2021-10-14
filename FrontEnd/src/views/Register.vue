@@ -5,17 +5,17 @@
       <h1 class="h3 mb-3 fw-normal">Inscription</h1>
 
       <div class="form-floating">
-        <input id="floatingPseudo" v-model="pseudo" class="form-control" placeholder="RandomNickName" required
+        <input id="floatingPseudo" v-model="data.pseudo" class="form-control" placeholder="RandomNickName" required
                type="text">
         <label for="floatingPseudo">Pseudo</label>
       </div>
       <div class="form-floating">
-        <input id="floatingEmail" v-model="email" class="form-control" placeholder="name@example.com" required
+        <input id="floatingEmail" v-model="data.email" class="form-control" placeholder="name@example.com" required
                type="email">
         <label for="floatingEmail">Adresse Mail</label>
       </div>
       <div class="form-floating">
-        <input id="floatingPassword" v-model="password" class="form-control" placeholder="password" required
+        <input id="floatingPassword" v-model="data.password" class="form-control" placeholder="password" required
                type="password">
         <label for="floatingPassword">Mot de Passe</label>
       </div>
@@ -29,22 +29,43 @@
 </template>
 
 <script>
+import * as Vue from 'vue' // in Vue 3
+import  axios  from 'axios';
+import VueAxios from 'vue-axios'
+
+const app = Vue.createApp();
+app.use(VueAxios, axios)
+
 export default {
   name: "Register",
   data() {
     return {
-      pseudo: null,
-      email: null,
-      password: null,
+      data: {
+        pseudo: null,
+        email: null,
+        password: null,
+      }
     }
   },
   methods: {
-    createAccount: function () {
-      this.$store.dispatch('createAccount', {
-        pseudo: this.pseudo,
-        email: this.email,
-        password: this.password
-      })
+    createAccount(){
+      const post = {
+        pseudo: this.data.pseudo,
+        email: this.data.email,
+        password: this.data.password
+      }
+
+      axios.post("http://localhost:3000/api/user/signup", post)
+          .then((res) => {
+            console.log(res);
+            alert("Utilisateur enregistré ! Veuillez vous connecter");
+            this.$router.push({
+              name: 'Login',
+              params: { message: res.data.message}
+            });
+          })
+          .catch(err => {err.message})
+
     }
   }
 }

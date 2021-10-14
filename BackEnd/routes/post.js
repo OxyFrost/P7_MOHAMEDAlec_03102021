@@ -15,4 +15,10 @@ router.put('/:id', multer, postCtrl.updatePost);
 
 router.delete('/:id', postCtrl.deletePost);
 
+router.post('/:id/comment', postCtrl.createComment);
+
+router.put('/:id/comment/:idComment', postCtrl.updateComment);
+
+router.delete('/:id/comment/:idComment', postCtrl.deleteComment);
+
 module.exports = router;
