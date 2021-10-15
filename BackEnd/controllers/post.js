@@ -65,11 +65,22 @@ exports.updatePost = async (req, res, next) => {
 //Suppression du Post d'un utilisateur
 exports.deletePost = async (req, res, next) => {
     const id = req.params.id;
-    const deletedPost = await prisma.post.delete({
+    console.log(id);
+
+    const deletedComment = prisma.comment.deleteMany({
+        where: {
+            postId: Number(id)
+        }
+    })
+
+    const deletedPost =  prisma.post.delete({
         where: {
             id: Number(id)
         }
-    }).then(() => res.status(200).json({message: 'Objet supprimé !'}))
+    })
+
+    const transaction = await prisma.$transaction([deletedComment, deletedPost])
+        .then(() => res.status(200).json({message: 'Objet supprimé !'}))
         .catch(error => res.status(400).json({message: error.message}));
 }
 

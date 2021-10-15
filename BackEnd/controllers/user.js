@@ -99,6 +99,10 @@ exports.getOneUser = async (req, res, next) => {
         where: {
             id: Number(req.params.id),
         },
+        include:{
+            posts: true,
+            comments: true,
+        },
     }).then(user => res.status(200).json(user))
       .catch(error => res.status(404).json({message: error.message}));
 };
