@@ -6,8 +6,8 @@
             <img v-bind:src="user.imgURL" alt="" class="ui-w-100 rounded-circle">
             <div class="media-body ml-4">
                 <h4 class="font-weight-bold mb-2">{{ this.user.pseudo }}</h4>
-                <button class="btn btn-primary btn-sm">Modifier Profil</button>&nbsp;
-                <button class="btn btn-danger btn-sm">Se déconnecter</button>&nbsp;
+                <button v-if="this.userId === this.$route.params.id" class="btn btn-primary btn-sm" @click="editProfile(this.user.id)">Modifier Profil</button>&nbsp;
+                <button v-if="this.userId === this.$route.params.id" class="btn btn-danger btn-sm" @click="logout()">Se déconnecter</button>&nbsp;
             </div>
         </div>
 
@@ -63,7 +63,14 @@
 
 <script>
 import NavMenu from "@/components/NavMenu";
-import axios from "axios";
+import * as Vue from 'vue' // in Vue 3
+import axios from 'axios';
+import VueAxios from 'vue-axios'
+import router from "@/router";
+
+const app = Vue.createApp();
+app.use(VueAxios, axios)
+
 export default {
     name: "Profile",
     components: {NavMenu},
@@ -73,6 +80,7 @@ export default {
             createdAt: null,
             nbPosts: 0,
             nbComments: 0,
+            userId: sessionStorage.getItem('userId'),
         }
     },
     methods: {
@@ -86,8 +94,34 @@ export default {
                     this.nbComments = this.user.comments.length;
                     this.createdAt = date.getUTCDay() + '-' + date.getUTCMonth() + '-' + date.getUTCFullYear()
                                      + ' à ' + date.getUTCHours() + ':' + date.getUTCMinutes() + ':' + date.getUTCSeconds();
+                }).catch((err) => {
+                    if (err.response.status === 401 || err.response.status === 403) {
+                        this.refreshToken();
+                        return this.getUserInfos();
+                    }
                 })
 
+        },
+        logout(){
+            if(confirm("Voulez vous vraiment vous déconnecter ?")) {
+                sessionStorage.removeItem('userId');
+                sessionStorage.removeItem('role');
+                sessionStorage.removeItem('token');
+                delete axios.defaults.headers.common["Authorization"];
+                router.push({ name: 'Login'});
+            }
+        },
+        editProfile(idUser){
+            router.push({ name: 'EditProfile', params: { id: idUser } });
+        },
+        refreshToken(){
+            let token = sessionStorage.getItem('token');
+            if (token) {
+                axios.defaults.headers.common["Authorization"] = "Bearer " + token;
+            } else {
+                delete axios.defaults.headers.common["Authorization"];
+                router.push({ name: 'Login'});
+            }
         }
     },
     mounted(){
