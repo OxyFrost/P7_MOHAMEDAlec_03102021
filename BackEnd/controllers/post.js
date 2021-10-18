@@ -135,6 +135,23 @@ exports.createComment = async (req, res, next) => {
         .catch(error => res.status(400).json({message: error.message}));
 }
 
+exports.getComments = async (req, res, next) => {
+    const comments = await prisma.comment.findMany({
+        where: {
+            postId: Number(req.params.id),
+        },
+        include: {
+            author: true,
+        },
+        orderBy: [
+            {
+                createdAt: 'desc',
+            },
+        ],
+    }).then(comments => res.status(200).json(comments))
+        .catch(error => res.status(404).json({message: error.message}));
+}
+
 //Update des informations d'un comment
 exports.updateComment = async (req, res, next) => {
     const updatedComment = await prisma.comment.update({

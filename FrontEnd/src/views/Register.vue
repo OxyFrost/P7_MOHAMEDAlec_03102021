@@ -1,7 +1,7 @@
 <template>
     <main class="form-signin">
         <form method="post" @submit.prevent>
-            <img alt="Logo Groupomania" class="mb-4" src="@/assets/icon-above-font.svg">
+            <img alt="Logo Groupomania" class="mb-4" src="@/assets/img/icon-above-font.svg">
             <h1 class="h3 mb-3 fw-normal">Inscription</h1>
 
             <div class="form-floating">

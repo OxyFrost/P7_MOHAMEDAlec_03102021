@@ -4,7 +4,7 @@
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
         <div class="container-fluid ">
             <a class="navbar-brand" href="#">
-                <img class="logo" alt="Logo Groupomania" src="@/assets/icon-left-font-monochrome-white.svg">
+                <router-link to="/Home"><img class="logo" alt="Logo Groupomania" src="@/assets/img/icon-left-font-monochrome-white.svg"></router-link>
             </a>
             <button aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"
                     data-bs-target="#navbarCollapse" data-bs-toggle="collapse" type="button">
@@ -14,9 +14,6 @@
                 <ul class="navbar-nav me-auto mb-2 mb-md-0">
                     <li class="nav-item">
                         <router-link class="nav-link active" to="/Home">Accueil</router-link>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Link</a>
                     </li>
                 </ul>
                 <router-link class="unlink" :to="{ name: 'Profile', params: { id: this.userId }}">
@@ -32,6 +29,7 @@
 
 <script>
 import axios from "axios";
+import router from "@/router";
 
 export default {
     name: 'NavMenu',
@@ -39,22 +37,33 @@ export default {
         return {
             imgURL: null,
             pseudo:null,
-            userId: sessionStorage.getItem('userId')
+            userId: sessionStorage.getItem('userId'),
+            loop: 0,
         }
     },
     methods: {
         getUser() {
-
             axios.get("http://localhost:3000/api/user/" + this.userId)
                 .then((res) => {
-                    console.log(res.data);
                     this.imgURL = res.data.imgURL;
                     this.pseudo = res.data.pseudo;
                 })
-                .catch(err => {
-                    err.message
+                .catch( (err) => {
+                    if ((err.response.status === 401 || err.response.status === 403) && this.loop == 0) {
+                        this.loop++;
+                        this.refreshToken();
+                        return this.getUser();
+                    }
                 })
 
+        },refreshToken(){
+            let token = sessionStorage.getItem('token');
+            if (token) {
+                axios.defaults.headers.common["Authorization"] = "Bearer " + token;
+            } else {
+                delete axios.defaults.headers.common["Authorization"];
+                router.push({ name: 'Login'});
+            }
         }
     },
     mounted(){

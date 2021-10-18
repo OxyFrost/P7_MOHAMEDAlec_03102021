@@ -19,14 +19,17 @@
             <div class="row">
                 <div v-for="post in posts" :key="post.id" class="col-md-4">
                     <div class="card mb-4 box-shadow">
-                        <img v-if="post.imgURL !== null" alt="Image du Post" class="card-img-top cardImg"
-                             v-bind:src="post.imgURL">
+                        <router-link :to="{ name: 'Post', params: { id: post.id }}" class="unlink">
+                            <img v-if="post.imgURL !== null" alt="Image du Post" class="card-img-top cardImg"
+                                 v-bind:src="post.imgURL">
+                        </router-link>
                         <div class="card-body">
-                            <h5 class="card-title">{{ post.title }}</h5>
-                            <p v-if="post.imgURL == null" class="card-text">{{ post.message }}</p>
+                            <router-link :to="{ name: 'Post', params: { id: post.id }}" class="unlink">
+                                <h5 class="card-title">{{ post.title }}</h5>
+                                <p v-if="post.imgURL == null" class="card-text">{{ post.message }}</p>
+                            </router-link>
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="btn-group">
-                                    <button class="btn btn-sm btn-outline-secondary" type="button">Lire</button>
                                     <button v-if="post.authorId == this.userId || this.role == 'ADMIN'"
                                             class="btn btn-sm btn-outline-danger" type="button"
                                             @click="deletePost(post.id)">Supprimer
@@ -35,7 +38,7 @@
                                 <small class="text-muted">{{ post.comments.length }} Commentaire(s)</small>
                             </div>
                         </div>
-                        <router-link :to="{ name: 'Profile', params: { id: post.author.id }}" class="unlink">
+                        <router-link :to="{ name: 'Profile', params: { id: post.authorId }}" class="unlink">
                             <div class="card-footer bg-transparent text-start">
                                 <img alt="Image du Post" class="card-img-top profilePic"
                                      v-bind:src="post.author.imgURL">
@@ -69,38 +72,41 @@ export default {
             posts: [],
             role: sessionStorage.getItem('role'),
             userId: sessionStorage.getItem('userId'),
+            boucle: 0,
         }
     },
     methods: {
         getAllPosts() {
+
             axios.get('http://localhost:3000/api/post/')
                 .then(res => {
-                    console.log(res.data);
                     this.posts = res.data;
                 }).catch((err) => {
-                    if (err.response.status === 401 || err.response.status === 403) {
-                        this.refreshToken();
-                        return this.getAllPosts();
-                    }
-                })
+                if ((err.response.status === 401 || err.response.status === 403) && this.boucle === 0) {
+                    this.boucle++;
+                    this.refreshToken();
+                    return this.getAllPosts();
+                }
+            })
 
 
         },
         deletePost(idPost) {
             if (confirm("Voulez vous vraiment supprimer ce post ?")) {
-                axios.delete('http://localhost:3000/api/post/', {params: {id: idPost}})
+                axios.delete('http://localhost:3000/api/post/' + idPost)
                     .then((res) => {
                         console.log(res.data);
+                        this.$router.go();
                     })
             }
         },
-        refreshToken(){
+        refreshToken() {
             let token = sessionStorage.getItem('token');
             if (token) {
                 axios.defaults.headers.common["Authorization"] = "Bearer " + token;
             } else {
                 delete axios.defaults.headers.common["Authorization"];
-                router.push({ name: 'Login'});
+                router.push({name: 'Login'});
             }
         }
     }
@@ -112,7 +118,7 @@ export default {
 </script>
 
 
-<style scoped>
+<style>
 
 .cardImg {
     height: 250px;
@@ -126,7 +132,7 @@ export default {
     border-radius: 90px;
 }
 
-.unlink {
+.unlink, .unlink:hover {
     text-decoration: none;
     color: inherit;
 }

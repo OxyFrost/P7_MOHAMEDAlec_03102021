@@ -62,7 +62,7 @@ exports.update = async (req, res, next) => {
             },
             data: {
                 pseudo: req.body.pseudo,
-                imgURL: `${req.protocol}://${req.get('host')}/images/profile/${req.file.filename}`
+                imgURL: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
             }
         }).then(() => res.status(200).json({message: 'User modifié avec Avatar !'}))
             .catch(error => res.status(400).json({message: error.message}));
