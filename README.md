@@ -21,6 +21,8 @@ npx prisma generate
 nodemon server.js
 ```
 
+Si vous avez des problèmes avec la base de données, la structure sous fichier .sql est fourni dans le dossier `Backend\Prisma`.
+
 ## FrontEnd
 
 Pour lancer l'application, depuis la racine

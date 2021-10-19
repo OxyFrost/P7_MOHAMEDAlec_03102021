@@ -3,7 +3,7 @@
     <div class="album py-5 bg-light mt-5">
         <div class="container">
             <div class="row">
-                <div v-for="post in posts" :key="post.id" class="col-md-4">
+                <div v-for="post in posts" :key="post.id" class="col-12">
                     <div class="card mb-4 box-shadow borderBlue">
                         <router-link :to="{ name: 'Post', params: { id: post.id }}" class="unlink">
                             <img v-if="post.imgURL !== null" alt="Image du Post" class="card-img-top cardImg"
@@ -116,7 +116,7 @@ export default {
 <style>
 
 .cardImg {
-    height: auto;
+    max-height: 750px;
     object-fit: cover;
 }
 
@@ -142,5 +142,15 @@ export default {
 
 hr {
     color: #cf505a;
+}
+
+.iconDelete:hover{
+    color: red;
+    cursor: pointer;
+}
+
+.iconUpdate:hover{
+    color: green;
+    cursor: pointer;
 }
 </style>

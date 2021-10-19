@@ -104,9 +104,9 @@ export default {
                 .then(res => {
                     console.log(res.data);
                     this.user = res.data;
-                    let date = new Date(this.user.createdAt);
                     this.nbPosts = this.user.posts.length;
                     this.nbComments = this.user.comments.length;
+                    let date = new Date(this.user.createdAt);
                     this.createdAt = date.getUTCDay() + '-' + date.getUTCMonth() + '-' + date.getUTCFullYear()
                         + ' à ' + date.getUTCHours() + ':' + date.getUTCMinutes() + ':' + date.getUTCSeconds();
                 }).catch((err) => {

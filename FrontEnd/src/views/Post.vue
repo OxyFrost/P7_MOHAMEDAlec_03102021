@@ -33,12 +33,12 @@
                     <hr/>
                     <div class="well">
                         <router-link :to="{ name: 'Profile', params: { id: comment.authorId }}" class="unlink">
-                            <h5>{{ comment.author.pseudo }} :</h5>
+                            <h5>{{ comment.author.pseudo }} le {{ convertDate(comment.createdAt) }} :</h5>
                         </router-link>
                         <span>{{ comment.message }}</span>
                         <div v-if="this.post.authorId == this.userId || this.role == 'ADMIN'">
-                            <span @click="modifierComment(comment.id,comment.message)"><font-awesome-icon class="mx-2" :icon="['fa', 'edit']"/></span>
-                            <span @click="deleteComment(comment.id)"><font-awesome-icon class="mx-2" :icon="['fa', 'times']"/></span>
+                            <span @click="modifierComment(comment.id,comment.message)"><font-awesome-icon class="mx-2 iconUpdate" :icon="['fa', 'edit']"/></span>
+                            <span @click="deleteComment(comment.id)"><font-awesome-icon class="mx-2 iconDelete" :icon="['fa', 'times']"/></span>
                         </div>
                     </div>
                 </div>
@@ -88,7 +88,6 @@ export default {
             axios.get('http://localhost:3000/api/post/' + postId + '/comment')
                 .then(res => {
                     this.comments = res.data;
-                    console.log(res.data);
                 }).catch((err) => {
                 if ((err.response.status === 401 || err.response.status === 403) && this.loop == 0) {
                     this.loop++;
@@ -163,6 +162,23 @@ export default {
                 delete axios.defaults.headers.common["Authorization"];
                 router.push({name: 'Login'});
             }
+        },
+        convertDate(dateReceived){
+            let date = new Date(dateReceived);
+            let day = date.getUTCDay();
+            let month = date.getUTCMonth();
+
+            if(date.getUTCDay() < 10){
+                day = '0' + date.getUTCDay();
+            }
+
+            if(date.getUTCMonth() < 10){
+                month = '0' + date.getUTCMonth();
+            }
+
+            let formattedDate = day + '-' + month + '-' + date.getUTCFullYear()
+                + ' à ' + date.getUTCHours() + ':' + date.getUTCMinutes() + ':' + date.getUTCSeconds();
+            return formattedDate;
         }
     },
     created() {
@@ -177,4 +193,5 @@ export default {
     width: 100%;
     height: 100%;
 }
+
 </style>

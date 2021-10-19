@@ -20,7 +20,7 @@
                         <input id="image" class="form-control" placeholder="Image.png" type="file"
                                @change="handleFileUpload">
                     </div>
-                    <button class="btn btn-lg btn-secondary m-2">Retour</button>
+                    <button class="btn btn-lg btn-secondary m-2" @click="toHome()">Retour</button>
                     <button class="btn btn-lg btn-primary m-2" type="submit" @click="createPost()">Créer le Post
                     </button>
                 </form>
@@ -78,6 +78,9 @@ export default {
             console.log(event);
             this.data.image = event.target.files[0];
         },
+        toHome(){
+            router.push({ name: 'Home'});
+        }
     }
 }
 </script>

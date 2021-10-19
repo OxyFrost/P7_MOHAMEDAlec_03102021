@@ -12,7 +12,7 @@
                         <label for="image" class="form-label">Avatar</label>
                         <input type="file" @change="handleFileUpload" id="image" class="form-control" placeholder="Image.png">
                     </div>
-                    <button class="btn btn-lg btn-secondary m-2">Retour</button>
+                    <button class="btn btn-lg btn-secondary m-2" @click="toHome">Retour</button>
                     <button class="btn btn-lg btn-primary m-2" type="submit" @click="updateProfil">Modifier le profil</button>
                 </form>
             </div>
@@ -40,7 +40,16 @@ export default {
         }
     },
     methods: {
-
+        getInfos(){
+                let userInfo = this.$route.params.id
+                axios.get('http://localhost:3000/api/user/' + userInfo)
+                    .then(res => {
+                        console.log(res.data);
+                        this.data.pseudo = res.data.pseudo;
+                    }).catch((err) => {
+                        console.log(err.message);
+                    })
+        },
         updateProfil() {
             console.log(this.data.image);
             let formData = new FormData();
@@ -68,6 +77,13 @@ export default {
             console.log(event);
             this.data.image = event.target.files[0];
         },
+        toHome(){
+            let idProfile = this.$route.params.id;
+            router.push({ name: 'Profile', params: { id: idProfile } });
+        }
+    },
+    mounted() {
+        this.getInfos();
     }
 }
 </script>
