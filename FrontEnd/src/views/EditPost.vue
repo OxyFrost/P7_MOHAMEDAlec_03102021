@@ -1,6 +1,6 @@
 <template>
     <NavMenu/>
-    <div class="container flex-grow-1 container-p-y pt-5 mt-5">
+    <div class="container flex-grow-1 container-p-y pt-5 mt-5 mb-5">
         <div class="card mb-4">
             <h2 class="my-2">Modification du Post</h2>
             <div class="card-body">
@@ -16,7 +16,7 @@
                     <div class="mb-3">
                         <label for="image" class="form-label">Image</label>
                         <input type="file" @change="handleFileUpload" id="image" class="form-control" placeholder="Image.png">
-                        <img alt="Image du Post" class="formImg my-5" v-if="this.imgURL !== null || this.imgURL !== ''" v-bind:src="this.imgURL"/>
+                        <img v-if="this.imgURL !== null" alt="Image du Post" class="formImg my-5" v-bind:src="this.imgURL"/>
                     </div>
 
                     <button class="btn btn-lg btn-secondary m-2">Retour</button>
@@ -26,16 +26,18 @@
             <hr class="border-light m-0">
         </div>
     </div>
+    <Footer/>
 </template>
 
 <script>
 import NavMenu from "@/components/NavMenu";
 import axios from "axios";
 import router from "@/router";
+import Footer from "@/components/Footer";
 
 export default {
     name: "EditPost",
-    components:{NavMenu},
+    components:{Footer, NavMenu},
     data() {
         return {
             data: {
@@ -55,6 +57,7 @@ export default {
                     this.data.title = res.data.title;
                     this.data.message = res.data.message;
                     this.imgURL = res.data.imgURL;
+                    console.log(this.imgURL);
                 })
                 .catch(() => {
 
@@ -97,7 +100,7 @@ export default {
 
 <style scoped>
 .formImg{
-    width: auto;
-    height: 250px;
+    width: 100%;
+    height: 100%;
 }
 </style>

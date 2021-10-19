@@ -1,6 +1,6 @@
 <template>
     <NavMenu/>
-    <div class="container flex-grow-1 container-p-y pt-5 mt-5">
+    <div class="container flex-grow-1 container-p-y pt-5 my-5">
 
         <div class="media align-items-center py-3 mb-3">
             <img alt="" class="profilAvatar rounded-circle" v-bind:src="this.user.imgURL">
@@ -29,7 +29,7 @@
                     </tr>
                     <tr>
                         <td>Etat :</td>
-                        <td v-if="this.user.deletedAt !== null || this.user.deletedAt !== ''">Compte Actif</td>
+                        <td v-if="this.user.deletedAt == null">Compte Actif</td>
                         <td v-else>Compte Inactif</td>
                     </tr>
                     </tbody>
@@ -66,7 +66,11 @@
                 </table>
             </div>
         </div>
+        <button v-if="this.userId === this.$route.params.id" class="btn btn-danger mb-5 mt-3"
+                @click="deleteAccount(this.user.id)">Supprimer le compte
+        </button>
     </div>
+    <Footer/>
 </template>
 
 <script>
@@ -75,13 +79,14 @@ import * as Vue from 'vue' // in Vue 3
 import axios from 'axios';
 import VueAxios from 'vue-axios'
 import router from "@/router";
+import Footer from "@/components/Footer";
 
 const app = Vue.createApp();
 app.use(VueAxios, axios)
 
 export default {
     name: "Profile",
-    components: {NavMenu},
+    components: {Footer, NavMenu},
     data() {
         return {
             user: [],
@@ -97,6 +102,7 @@ export default {
             let userInfo = this.$route.params.id
             axios.get('http://localhost:3000/api/user/' + userInfo)
                 .then(res => {
+                    console.log(res.data);
                     this.user = res.data;
                     let date = new Date(this.user.createdAt);
                     this.nbPosts = this.user.posts.length;
@@ -123,6 +129,21 @@ export default {
         },
         editProfile(idUser) {
             router.push({name: 'EditProfile', params: {id: idUser}});
+        },
+        deleteAccount(idUser){
+            if (confirm("Etes vous sûr de vouloir supprimer votre compte ? Cette action est irréversible et il faudra contacter un administrateur pour pouvoir le débloquer.")) {
+                axios.delete('http://localhost:3000/api/user/' + idUser)
+                    .then(res => {
+                        console.log(res.data);
+                        sessionStorage.removeItem('userId');
+                        sessionStorage.removeItem('role');
+                        sessionStorage.removeItem('token');
+                        delete axios.defaults.headers.common["Authorization"];
+                        router.push({name: 'Login'});
+                    }).catch((err) => {
+                        console.log(err.message);
+                    });
+            }
         },
         refreshToken() {
             let token = sessionStorage.getItem('token');

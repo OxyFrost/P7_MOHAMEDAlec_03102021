@@ -19,16 +19,18 @@
             <hr class="border-light m-0">
         </div>
     </div>
+    <Footer/>
 </template>
 
 <script>
 import NavMenu from "@/components/NavMenu";
 import axios from "axios";
 import router from "@/router";
+import Footer from "@/components/Footer";
 
 export default {
     name: "EditProfile",
-    components: {NavMenu},
+    components: {Footer, NavMenu},
     data() {
         return {
             data: {

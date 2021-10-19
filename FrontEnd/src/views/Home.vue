@@ -1,5 +1,5 @@
 <template>
-    <navMenu/>
+    <NavMenu/>
     <div class="album py-5 bg-light mt-5">
         <div class="container">
             <div class="row">
@@ -14,8 +14,8 @@
                                 <h5 class="card-title">{{ post.title }}</h5>
                                 <p v-if="post.imgURL == null" class="card-text">{{ post.message }}</p>
                             </router-link>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div v-if="post.authorId == this.userId || this.role == 'ADMIN'" class="btn-group">
+                            <small class="text-muted">{{ post.comments.length }} Commentaire(s)</small>
+                                <div v-if="post.authorId == this.userId || this.role == 'ADMIN'" class="btn-group m-1">
                                     <button class="btn btn-sm btn-outline-success" type="button"
                                             @click="modifierPost(post.id)">Modifier
                                     </button>
@@ -23,8 +23,6 @@
                                             @click="deletePost(post.id)">Supprimer
                                     </button>
                                 </div>
-                                <small class="text-muted">{{ post.comments.length }} Commentaire(s)</small>
-                            </div>
                         </div>
                         <router-link :to="{ name: 'Profile', params: { id: post.authorId }}" class="unlink">
                             <div class="card-footer borderFooterRed bg-transparent text-start">
@@ -38,10 +36,12 @@
             </div>
         </div>
     </div>
+    <Footer/>
 </template>
 
 <script>
 import NavMenu from "@/components/NavMenu";
+import Footer from "@/components/Footer";
 import * as Vue from 'vue' // in Vue 3
 import axios from 'axios';
 import VueAxios from 'vue-axios'
@@ -54,6 +54,7 @@ export default {
     name: 'Home',
     components: {
         NavMenu,
+        Footer,
     },
     data() {
         return {
@@ -115,7 +116,7 @@ export default {
 <style>
 
 .cardImg {
-    height: 250px;
+    height: auto;
     object-fit: cover;
 }
 
@@ -142,5 +143,4 @@ export default {
 hr {
     color: #cf505a;
 }
-
 </style>

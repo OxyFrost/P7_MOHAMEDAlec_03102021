@@ -46,6 +46,7 @@
             </div>
         </div>
     </div>
+    <Footer/>
 </template>
 
 <script>
@@ -54,13 +55,14 @@ import * as Vue from 'vue' // in Vue 3
 import axios from 'axios';
 import VueAxios from 'vue-axios'
 import router from "@/router";
+import Footer from "@/components/Footer";
 
 const app = Vue.createApp();
 app.use(VueAxios, axios)
 
 export default {
     name: "Post",
-    components: {NavMenu},
+    components: {Footer, NavMenu},
     data(){
         return {
             post: null,

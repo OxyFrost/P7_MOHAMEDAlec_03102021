@@ -1,6 +1,6 @@
 <template>
     <NavMenu/>
-    <div class="container flex-grow-1 container-p-y pt-5 mt-5">
+    <div class="container flex-grow-1 container-p-y pt-5 my-5">
         <div class="card mb-4">
             <h2 class="my-2">Création d'un Post</h2>
             <div class="card-body">
@@ -28,16 +28,18 @@
             <hr class="border-light m-0">
         </div>
     </div>
+    <Footer/>
 </template>
 
 <script>
 import NavMenu from "@/components/NavMenu";
 import axios from "axios";
 import router from "@/router";
+import Footer from "@/components/Footer";
 
 export default {
     name: "CreatePost",
-    components:{NavMenu},
+    components:{Footer, NavMenu},
     data() {
         return {
             data: {

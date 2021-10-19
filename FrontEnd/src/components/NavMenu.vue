@@ -1,7 +1,7 @@
 // ./components/NavMenu.vue
 
 <template>
-    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <nav class="navbar navbar-expand-md navbar-dark themeColor fixed-top">
         <div class="container-fluid ">
             <a class="navbar-brand" href="#">
                 <router-link to="/Home"><img class="logo" alt="Logo Groupomania" src="@/assets/img/icon-left-font-monochrome-white.svg"></router-link>
@@ -78,6 +78,10 @@ export default {
 <style scoped>
 .logo{
     width: 140px;
+}
+
+.themeColor{
+    background-color: #091f43;
 }
 
 .profileNav{
