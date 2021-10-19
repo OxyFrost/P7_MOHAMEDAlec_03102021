@@ -5,6 +5,8 @@ import Home from "@/views/Home";
 import Profile from "@/views/Profile";
 import EditProfile from "@/views/EditProfile";
 import Post from "@/views/Post";
+import EditPost from "@/views/EditPost";
+import CreatePost from "@/views/CreatePost";
 
 const routes = [
     {
@@ -29,9 +31,19 @@ const routes = [
         component: Home
     },
     {
+        path: '/post/create',
+        name: 'CreatePost',
+        component: CreatePost
+    },
+    {
         path: '/post/:id',
         name: 'Post',
         component: Post
+    },
+    {
+        path: '/post/:id/edit',
+        name: 'EditPost',
+        component: EditPost
     },
     {
         path: '/profile/:id',

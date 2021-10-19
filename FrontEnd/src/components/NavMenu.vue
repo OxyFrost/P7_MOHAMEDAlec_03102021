@@ -15,6 +15,9 @@
                     <li class="nav-item">
                         <router-link class="nav-link active" to="/Home">Accueil</router-link>
                     </li>
+                    <li class="nav-item">
+                        <router-link class="nav-link active" to="/post/create">Créer un Post</router-link>
+                    </li>
                 </ul>
                 <router-link class="unlink" :to="{ name: 'Profile', params: { id: this.userId }}">
                     <span class="navbar-text">

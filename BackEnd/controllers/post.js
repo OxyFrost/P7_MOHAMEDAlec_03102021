@@ -29,7 +29,7 @@ exports.createPost = async (req, res, next) => {
     const createdPost = await prisma.post.create({
         data: post,
     }).then(() => res.status(201).json({message: 'Le Post a bien été créée'}))
-        .catch(error => res.status(400).json({message: error.message}));
+        .catch(error => res.status(400).json({message: error.message, data: post}));
 }
 
 //Update des informations d'un Post

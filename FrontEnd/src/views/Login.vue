@@ -1,7 +1,7 @@
 <template>
     <main class="form-signin">
         <form method="post" @submit.prevent>
-            <img alt="Logo Groupomania" class="mb-4" src="src/assets/img/icon-above-font.svg">
+            <img alt="Logo Groupomania" class="mb-4" src="@/assets/img/icon-above-font.svg">
             <h1 class="h3 mb-3 fw-normal">Connexion</h1>
 
             <p class="message">{{ message }}</p>

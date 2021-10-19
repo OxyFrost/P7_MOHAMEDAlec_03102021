@@ -8,15 +8,14 @@
                     <span>Par {{ this.post.author.pseudo }}</span>
                 </router-link>
                 <div v-if="this.post.authorId == this.userId || this.role == 'ADMIN'" class="btn-group mx-5 my-2">
-                    <button class="btn btn-sm btn-outline-primary" type="button" @click="modifierPost(this.post.id)">Modifier</button>
+                    <button class="btn btn-sm btn-outline-success" type="button" @click="modifierPost(this.post.id)">Modifier</button>
                     <button class="btn btn-sm btn-outline-danger" type="button" @click="deletePost(this.post.id)">Supprimer</button>
                 </div>
-                <hr>
                 <div v-if="this.post.imgURL !== null">
-                    <img v-bind:src="this.post.imgURL"  class="img-responsive">
-                    <hr>
+                    <img v-bind:src="this.post.imgURL"  class="img-responsive imgContainer">
                 </div>
                 <div v-if="this.post.message !== null">
+                    <hr>
                     <p>{{ this.post.message }}</p>
                 </div>
                 <br/>
@@ -37,6 +36,10 @@
                             <h5>{{ comment.author.pseudo }} :</h5>
                         </router-link>
                         <span>{{ comment.message }}</span>
+                        <div v-if="this.post.authorId == this.userId || this.role == 'ADMIN'">
+                            <span @click="modifierComment(comment.id,comment.message)"><font-awesome-icon class="mx-2" :icon="['fa', 'edit']"/></span>
+                            <span @click="deleteComment(comment.id)"><font-awesome-icon class="mx-2" :icon="['fa', 'times']"/></span>
+                        </div>
                     </div>
                 </div>
 
@@ -93,25 +96,57 @@ export default {
             })
         },
         modifierPost(idPost) {
-            console.log(idPost);
+            router.push({name: 'EditPost', params: {id: idPost}});
         },
         deletePost(idPost) {
             if (confirm("Voulez vous vraiment supprimer ce post ?")) {
                 axios.delete('http://localhost:3000/api/post/' + idPost)
                     .then((res) => {
                         console.log(res.data);
+                        alert("Post supprimé avec succès !");
+                        router.push({name: 'Home'});
                     })
                     .catch((err) => {
                         console.log(err.message);
                     })
             }
         },
+        modifierComment(idComment, message) {
+            const idPost = this.$route.params.id;
+            let newComment = prompt("Modifier votre commentaire : ", message);
 
+            let data = {
+                message: newComment,
+            }
+            axios.put('http://localhost:3000/api/post/' + idPost + '/comment/' + idComment, data)
+                .then(() => {
+                    alert("Commentaire modifié avec succès !");
+                    this.$router.go();
+                })
+                .catch((err) => {
+                    console.log(err.message);
+                })
+            console.log(idComment,idPost,newComment);
+        },
+        deleteComment(idComment) {
+            const idPost = this.$route.params.id;
+            if (confirm("Voulez vous vraiment supprimer ce commentaire ?")) {
+                axios.delete('http://localhost:3000/api/post/' + idPost + '/comment/' + idComment)
+                    .then(() => {
+                        alert("Commentaire supprimé avec succès !");
+                        this.$router.go();
+                    })
+                    .catch((err) => {
+                        console.log(err.message);
+                    })
+            }
+        },
         createComment(idPost) {
 
             axios.post('http://localhost:3000/api/post/' + idPost + '/comment', this.data)
                 .then((res) => {
                     console.log(res.data);
+                    alert("Commentaire ajouté avec succès !");
                     this.$router.go();
                 })
                 .catch((err) => {
@@ -136,4 +171,8 @@ export default {
 
 <style scoped>
 
+.imgContainer{
+    width: 100%;
+    height: 100%;
+}
 </style>
