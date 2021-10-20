@@ -107,8 +107,7 @@ export default {
                     this.nbPosts = this.user.posts.length;
                     this.nbComments = this.user.comments.length;
                     let date = new Date(this.user.createdAt);
-                    this.createdAt = date.getUTCDay() + '-' + date.getUTCMonth() + '-' + date.getUTCFullYear()
-                        + ' à ' + date.getUTCHours() + ':' + date.getUTCMinutes() + ':' + date.getUTCSeconds();
+                    this.createdAt = date.toLocaleDateString() + ' à ' + date.toLocaleTimeString()
                 }).catch((err) => {
                 if ((err.response.status === 401 || err.response.status === 403) && this.loop == 0) {
                     this.loop++;

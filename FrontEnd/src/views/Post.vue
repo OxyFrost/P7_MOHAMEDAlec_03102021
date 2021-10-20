@@ -165,19 +165,7 @@ export default {
         },
         convertDate(dateReceived){
             let date = new Date(dateReceived);
-            let day = date.getUTCDay();
-            let month = date.getUTCMonth();
-
-            if(date.getUTCDay() < 10){
-                day = '0' + date.getUTCDay();
-            }
-
-            if(date.getUTCMonth() < 10){
-                month = '0' + date.getUTCMonth();
-            }
-
-            let formattedDate = day + '-' + month + '-' + date.getUTCFullYear()
-                + ' à ' + date.getUTCHours() + ':' + date.getUTCMinutes() + ':' + date.getUTCSeconds();
+            let formattedDate = date.toLocaleDateString() + ' à ' + date.toLocaleTimeString();
             return formattedDate;
         }
     },
