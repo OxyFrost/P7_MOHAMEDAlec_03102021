@@ -167,7 +167,7 @@ exports.updateComment = async (req, res, next) => {
 
 //Suppression du comment d'un utilisateur
 exports.deleteComment = async (req, res, next) => {
-    const id = req.params.id;
+    const id = req.params.idComment;
     const deletedComment = await prisma.comment.delete({
         where: {
             id: Number(id)

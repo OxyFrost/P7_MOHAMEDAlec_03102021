@@ -36,7 +36,7 @@
                             <h5>{{ comment.author.pseudo }} le {{ convertDate(comment.createdAt) }} :</h5>
                         </router-link>
                         <span>{{ comment.message }}</span>
-                        <div v-if="this.post.authorId == this.userId || this.role == 'ADMIN'">
+                        <div v-if="comment.authorId == this.userId || this.role == 'ADMIN'">
                             <span @click="modifierComment(comment.id,comment.message)"><font-awesome-icon class="mx-2 iconUpdate" :icon="['fa', 'edit']"/></span>
                             <span @click="deleteComment(comment.id)"><font-awesome-icon class="mx-2 iconDelete" :icon="['fa', 'times']"/></span>
                         </div>

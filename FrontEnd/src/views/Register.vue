@@ -4,6 +4,8 @@
             <img alt="Logo Groupomania" class="mb-4" src="@/assets/img/icon-above-font.svg">
             <h1 class="h3 mb-3 fw-normal">Inscription</h1>
 
+            <p class="message">{{ this.message }}</p>
+
             <div class="form-floating">
                 <input id="floatingPseudo" v-model="data.pseudo" class="form-control" placeholder="RandomNickName"
                        required
@@ -47,30 +49,35 @@ export default {
                 pseudo: null,
                 email: null,
                 password: null,
-            }
+            },
+            message: '',
         }
     },
     methods: {
         createAccount() {
+
             const post = {
                 pseudo: this.data.pseudo,
                 email: this.data.email,
                 password: this.data.password
             }
-
-            axios.post("http://localhost:3000/api/user/signup", post)
-                .then((res) => {
-                    console.log(res);
-                    alert("Utilisateur enregistré ! Veuillez vous connecter");
-                    this.$router.push({
-                        name: 'Login',
-                        params: {message: res.data.message}
-                    });
-                })
-                .catch(err => {
-                    err.message
-                })
-
+            if(this.data.pseudo != '' && this.data.email != '' && this.data.password != '') {
+                axios.post("http://localhost:3000/api/user/signup", post)
+                    .then((res) => {
+                        console.log(res);
+                        alert("Utilisateur enregistré ! Veuillez vous connecter");
+                        this.$router.push({
+                            name: 'Login',
+                            params: {message: res.data.message}
+                        });
+                    })
+                    .catch(err => {
+                        err.message;
+                        this.message = "L'adresse mail a déjà été utilisé, veuillez en choisir une autre";
+                    })
+            }else{
+                this.message = "Un champs est manquant ou erroné, veuillez le modifier !";
+            }
         }
     }
 }
@@ -107,5 +114,9 @@ export default {
     margin-bottom: 10px;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
+}
+
+.message {
+    color: red;
 }
 </style>
