@@ -1,8 +1,6 @@
 # Groupomania
 Projet Groupomania pour OpenClassrooms
 
-#Installation
-
 ##Prérequis
 
 Pour pouvoir lancer cette application, assurez vous d'avoir node et NPM d'installé.
